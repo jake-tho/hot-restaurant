@@ -2,6 +2,7 @@
 // =============================================================
 var express = require("express");
 var path = require("path");
+const Reservations = require('./resdata')
 
 // Sets up the Express App
 // =============================================================
@@ -13,14 +14,35 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const tables = [
-    {status:false},
-    {status:false},
-    {status:false},
-    {status:false},
-    {status:false}
+    {
+        tableNo:'1',
+        status:false,
+        customer:''
+    },
+    {
+        tableNo:'2',
+        status:false,
+        customer:''
+    },
+    {
+        tableNo:'3',
+        status:false,
+        customer:''},
+    {
+        tableNo:'4',
+        status:false,
+        customer:''
+    },
+    {
+        tableNo:'5',
+        status:false,
+        customer:''
+    }
 ]
+const waitList = []
 
-ß
+
+
 
 app.get('/', function(req, res){
     res.sendFile(path.join(_dirname,''))
@@ -35,14 +57,35 @@ app.get('/tables', function(req, res){
 })
 
 app.post('/sendres', function(req, res){
+    var newRes = req.body;
+
+    var customer = new Reservations(newRes.name, newRes.phone, newRes.email, newRes.uniqueid)
+    console.log(customer)
+    res.json('your reservatrion has been placed')
+
+
+
+    
     
 })
 
 app.get('/getinfo', function(req, res){
+
+    let availableTables = []
+
+    tables.forEach(e => {
+        if(e.status == false){
+            availableTables.push(e.tableNo)
+        }
+    })
     var response = {
-        tablesAvailable:'',
-        listOfAvailale: [],
+        tablesAvailable: availableTables.length,
+        listOfAvailale: availableTables,
         tableStatus: tables,
+        waitList: waitList
     }
     res.json(response)
 })
+app.listen(PORT, function() {
+    console.log("App listening on PORT " + PORT);
+  });
