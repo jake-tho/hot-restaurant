@@ -33,3 +33,5 @@ class Reservations{
 //const customerRES = new Reservations("name",1112223333,"name@email",10)
 
 //customerRES.printInfo()
+
+module.exports = Reservations;
